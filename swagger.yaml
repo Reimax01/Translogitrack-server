@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: API de TransLogiTrack
+  description: API para el sistema de gestión logística TransLogiTrack
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Servidor de desarrollo
+tags:
+  - name: Autenticación
+    description: Operaciones relacionadas con autenticación de usuarios
+  - name: Usuarios
+    description: Operaciones relacionadas con la gestión de usuarios
+  - name: Camiones
+    description: Operaciones relacionadas con la gestión de la flota de camiones
+  - name: Conductores
+    description: Operaciones relacionadas con la gestión de conductores
+  - name: Rutas
+    description: Operaciones relacionadas con la gestión de rutas
+  - name: Pedidos
+    description: Operaciones relacionadas con la gestión de pedidos
+
+paths:
+  /auth/login:
+    post:
+      tags: [Autenticación]
+      summary: Iniciar sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                correo_electronico:
+                  type: string
+                  format: email
+                  example: admin@translogitrack.com
+                contrasena:
+                  type: string
+                  example: password123
+              required:
+                - correo_electronico
+                - contrasena
+      responses:
+        200:
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  usuario:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      nombre:
+                        type: string
+                        example: Admin User
+                      rol:
+                        type: string
+                        example: Administrador
+                      correo:
+                        type: string
+                        example: admin@translogitrack.com
+        400:
+          description: Credenciales inválidas
+        401:
+          description: No autorizado
