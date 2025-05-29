@@ -19,7 +19,7 @@ router.post('/recuperar-contrasena', [
   check('correo_electronico', 'El correo electrónico es obligatorio').isEmail()
 ], authController.recuperarContrasena);
 
-router.post('/resetear-contrasena', [
+router.post('/reset-password', [
   check('token', 'El token es obligatorio').not().isEmpty(),
   check('nuevaContrasena', 'La nueva contraseña debe tener al menos 6 caracteres').isLength({ min: 6 })
 ], authController.resetearContrasena);

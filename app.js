@@ -4,11 +4,29 @@ const YAML = require('yamljs');
 const swaggerUi = require('swagger-ui-express');
 const { sequelize, establecerRelaciones } = require('./models');
 const errorMiddleware = require('./middlewares/errorMiddleware');
+const path = require('path');
+
+// Manejo global de errores no capturados
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection:', reason);
+  process.exit(1);
+});
 
 const app = express();
 
 // Configuración de Swagger
-const swaggerDocument = YAML.load('./swagger.yaml');
+let swaggerDocument;
+try {
+  swaggerDocument = YAML.load(path.resolve(__dirname, 'swagger.yaml'));
+} catch (err) {
+  console.error('Error cargando swagger.yaml:', err.message);
+  process.exit(1);
+}
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Middlewares
@@ -18,7 +36,7 @@ app.use(express.json());
 // Establecer relaciones entre modelos
 establecerRelaciones();
 
-// Importar todas las rutas
+// Importar rutas
 const authRoutes = require('./routes/authRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const conductorRoutes = require('./routes/conductorRoutes');
@@ -48,12 +66,10 @@ app.get('/', (req, res) => {
 // Manejo de errores
 app.use(errorMiddleware);
 
-// Sincronizar modelos con la base de datos
+// Sincronización de BD y arranque del servidor
 sequelize.sync({ alter: true })
   .then(() => {
     console.log('Base de datos sincronizada');
-    
-    // Inicialización del servidor
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
       console.log(`Servidor corriendo en el puerto ${PORT}`);
