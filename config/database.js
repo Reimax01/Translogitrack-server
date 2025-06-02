@@ -1,30 +1,19 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    dialect: 'postgres',
-    logging: false,
-    pool: {
-      max: 5,
-      min: 0,
-      acquire: 30000,
-      idle: 10000
-    },
-    dialectOptions: {
-      prependSearchPath: true
-    },
-    define: {
-      freezeTableName: true,
-      underscored: true,
-      schema: 'public'
-    }
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: 'postgres',
+  logging: false,
+  dialectOptions: {
+    // Railway no requiere SSL en desarrollo local,
+    // pero en producción podrías activarlo así:
+    // ssl: { require: true, rejectUnauthorized: false },
+  },
+  define: {
+    freezeTableName: true,
+    underscored: true,
+    schema: 'public'
   }
-);
-
+});
 
 module.exports = sequelize;
