@@ -120,6 +120,13 @@ exports.crearPedido = async (req, res, next) => {
 
   try {
     const { id_ruta, id_camion, id_conductor, ...datosPedido } = req.body;
+
+    // Verificar permisos para crear pedidos para otros usuarios
+    if (req.body.id_usuario && req.body.id_usuario !== req.usuario.id) {
+      if (req.usuario.rol !== 'Administrador' && req.usuario.rol !== 'Operador') {
+        return res.status(403).json({ mensaje: 'No tienes permisos para crear pedidos para otros usuarios' });
+      }
+    }
     
     // Verificar disponibilidad del camión y conductor
     const camion = await Camion.findByPk(id_camion);
@@ -140,7 +147,7 @@ exports.crearPedido = async (req, res, next) => {
     // Crear el pedido
     const nuevoPedido = await Pedido.create({
       ...datosPedido,
-      id_cliente: req.usuario.id,
+      id_cliente: req.body.id_usuario || req.usuario.id,
       id_ruta,
       id_camion,
       id_conductor,
@@ -277,4 +284,4 @@ exports.actualizarUbicacion = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};    
+};

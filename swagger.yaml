@@ -3,27 +3,24 @@ info:
   title: API de TransLogiTrack
   description: API para el sistema de gestión logística TransLogiTrack
   version: 1.0.0
+
 servers:
   - url: http://localhost:3000/api
     description: Servidor de desarrollo
+
 tags:
   - name: Autenticación
-    description: Operaciones relacionadas con autenticación de usuarios
   - name: Usuarios
-    description: Operaciones relacionadas con la gestión de usuarios
-  - name: Camiones
-    description: Operaciones relacionadas con la gestión de la flota de camiones
   - name: Conductores
-    description: Operaciones relacionadas con la gestión de conductores
+  - name: Camiones
   - name: Rutas
-    description: Operaciones relacionadas con la gestión de rutas
   - name: Pedidos
-    description: Operaciones relacionadas con la gestión de pedidos
 
 paths:
   /auth/login:
     post:
-      tags: [Autenticación]
+      tags:
+        - Autenticación
       summary: Iniciar sesión
       requestBody:
         required: true
@@ -34,41 +31,231 @@ paths:
               properties:
                 correo_electronico:
                   type: string
-                  format: email
-                  example: admin@translogitrack.com
                 contrasena:
                   type: string
-                  example: password123
               required:
                 - correo_electronico
                 - contrasena
       responses:
         200:
           description: Inicio de sesión exitoso
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-                  usuario:
-                    type: object
-                    properties:
-                      id:
-                        type: integer
-                        example: 1
-                      nombre:
-                        type: string
-                        example: Admin User
-                      rol:
-                        type: string
-                        example: Administrador
-                      correo:
-                        type: string
-                        example: admin@translogitrack.com
-        400:
-          description: Credenciales inválidas
-        401:
-          description: No autorizado
+
+  /usuarios:
+    get:
+      tags:
+        - Usuarios
+      summary: Obtener todos los usuarios
+      responses:
+        200:
+          description: Lista de usuarios
+    post:
+      tags:
+        - Usuarios
+      summary: Crear un nuevo usuario
+      responses:
+        201:
+          description: Usuario creado
+
+  /usuarios/{id}:
+    put:
+      tags:
+        - Usuarios
+      summary: Actualizar usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Usuario actualizado
+    delete:
+      tags:
+        - Usuarios
+      summary: Eliminar usuario por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Usuario eliminado
+
+  /conductores:
+    get:
+      tags:
+        - Conductores
+      summary: Obtener todos los conductores
+      responses:
+        200:
+          description: Lista de conductores
+    post:
+      tags:
+        - Conductores
+      summary: Crear un nuevo conductor
+      responses:
+        201:
+          description: Conductor creado
+
+  /conductores/{id}:
+    put:
+      tags:
+        - Conductores
+      summary: Actualizar conductor por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Conductor actualizado
+    delete:
+      tags:
+        - Conductores
+      summary: Eliminar conductor por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Conductor eliminado
+
+  /camiones:
+    get:
+      tags:
+        - Camiones
+      summary: Obtener todos los camiones
+      responses:
+        200:
+          description: Lista de camiones
+    post:
+      tags:
+        - Camiones
+      summary: Crear un nuevo camión
+      responses:
+        201:
+          description: Camión creado
+
+  /camiones/{id}:
+    put:
+      tags:
+        - Camiones
+      summary: Actualizar camión por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Camión actualizado
+    delete:
+      tags:
+        - Camiones
+      summary: Eliminar camión por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Camión eliminado
+
+  /rutas:
+    get:
+      tags:
+        - Rutas
+      summary: Obtener todas las rutas
+      responses:
+        200:
+          description: Lista de rutas
+    post:
+      tags:
+        - Rutas
+      summary: Crear una nueva ruta
+      responses:
+        201:
+          description: Ruta creada
+
+  /rutas/{id}:
+    put:
+      tags:
+        - Rutas
+      summary: Actualizar ruta por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Ruta actualizada
+    delete:
+      tags:
+        - Rutas
+      summary: Eliminar ruta por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Ruta eliminada
+
+  /pedidos:
+    get:
+      tags:
+        - Pedidos
+      summary: Obtener todos los pedidos
+      responses:
+        200:
+          description: Lista de pedidos
+    post:
+      tags:
+        - Pedidos
+      summary: Crear un nuevo pedido
+      responses:
+        201:
+          description: Pedido creado
+
+  /pedidos/{id}:
+    put:
+      tags:
+        - Pedidos
+      summary: Actualizar pedido por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Pedido actualizado
+    delete:
+      tags:
+        - Pedidos
+      summary: Eliminar pedido por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Pedido eliminado
