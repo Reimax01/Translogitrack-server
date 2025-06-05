@@ -47,3 +47,13 @@ exports.finalizarMantenimiento = async (req, res, next) => {
     next(error);
   }
 };
+exports.obtenerHistorialMantenimiento = async (req, res, next) => {
+  try {
+    const mantenimiento = await MantenimientoCamion.findAll({
+      where: { id_camion: req.params.camionId }
+    });
+    res.json(mantenimiento);
+  } catch (error) {
+    next(error);
+  }
+};

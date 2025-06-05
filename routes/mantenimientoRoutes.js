@@ -17,4 +17,8 @@ router.put('/mantenimientos/:mantenimientoId/finalizar', [
   authMiddleware.autorizarRol('Administrador', 'Operador')
 ], mantenimientoController.finalizarMantenimiento);
 
+router.get('/camiones/:camionId/historial-mantenimientos', [
+  authMiddleware.verificarToken,
+  authMiddleware.autorizarRol('Administrador', 'Operador')
+], mantenimientoController.obtenerHistorialMantenimiento);
 module.exports = router;
