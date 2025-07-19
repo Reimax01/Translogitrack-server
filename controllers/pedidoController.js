@@ -130,14 +130,20 @@ exports.crearPedido = async (req, res, next) => {
     
     // Verificar disponibilidad del camión y conductor
     const camion = await Camion.findByPk(id_camion);
-    if (!camion || camion.estado_operativo !== 'Disponible') {
-      return res.status(400).json({ mensaje: 'El camión no está disponible' });
+    if (camion !== null){
+      if (!camion || camion.estado_operativo !== 'Disponible') {
+        return res.status(400).json({ mensaje: 'El camión no está disponible' });
+      }
     }
-
+    
+    // verificar disponibilidad del conductor
     const conductor = await Conductor.findByPk(id_conductor);
-    if (!conductor || !conductor.activo) {
-      return res.status(400).json({ mensaje: 'El conductor no está disponible' });
+    if (conductor !== null){
+      if (!conductor || !conductor.activo) {
+        return res.status(400).json({ mensaje: 'El conductor no está disponible' });
+      }
     }
+    
 
     const ruta = await Ruta.findByPk(id_ruta);
     if (!ruta) {
@@ -155,7 +161,9 @@ exports.crearPedido = async (req, res, next) => {
     });
 
     // Cambiar estado del camión a "Asignado"
-    await camion.update({ estado_operativo: 'Asignado' });
+    if (camion !== null){
+      await camion.update({ estado_operativo: 'Asignado' });
+    }
 
     // Crear primer seguimiento
     await SeguimientoPedido.create({

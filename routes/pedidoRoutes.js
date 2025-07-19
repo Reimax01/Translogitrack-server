@@ -17,9 +17,12 @@ router.get('/:id', [
 router.post('/', [
   authMiddleware.verificarToken,
   authMiddleware.autorizarRol('Cliente', 'Administrador', 'Operador'),
-  check('id_ruta', 'La ruta es obligatoria').isInt(),
-  check('id_camion', 'El camión es obligatorio').isInt(),
-  check('id_conductor', 'El conductor es obligatorio').isInt(),
+  check('id_ruta', 'La ruta es obligatoria').isInt(),check('id_camion')
+  .optional({ nullable: true })
+  .isInt().withMessage('El camión debe ser un número'),
+  check('id_conductor')
+    .optional({ nullable: true })
+    .isInt().withMessage('El conductor debe ser un número'),
   check('fecha_entrega_estimada', 'La fecha estimada de entrega es obligatoria').isISO8601()
 ], pedidoController.crearPedido);
 
