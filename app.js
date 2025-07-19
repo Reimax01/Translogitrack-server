@@ -30,7 +30,16 @@ try {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Middlewares
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+    'https://translogitrack-frontend.web.app'
+  ],
+  credentials: true, // si usas tokens o cookies
+};
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 // Establecer relaciones entre modelos
