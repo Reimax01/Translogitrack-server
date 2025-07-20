@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 // Función para enviar correo de recuperación
 const enviarEmailRecuperacion = async (email, token) => {
-  const resetUrl = `${process.env.FRONTEND_URL}reset-password?token=${token}`;
+  const resetUrl = `${process.env.FRONTEND_URL.replace(/\/$/, '')}/reset-password?token=${token}`;
   
   const mailOptions = {
     from: `"TransLogiTrack" <${process.env.EMAIL_USER}>`,
